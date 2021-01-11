@@ -1,0 +1,10 @@
+body {
+    background: #555;
+    color: white;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    background: teal;
+}
