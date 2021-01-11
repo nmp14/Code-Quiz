@@ -8,3 +8,12 @@ header {
     justify-content: space-between;
     background: teal;
 }
+
+main p {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.btn {
+    background: teal;
+}
