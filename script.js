@@ -15,6 +15,9 @@ let takingQuiz = false;
 let buttonCount = 1;
 // Variable for entering name at end of quiz
 let username = "";
+// Timer
+let timeRemaining = 60;
+let interval;
 
 // Generate question one
 function questionOne() {
@@ -57,6 +60,7 @@ function questionOne() {
         takingQuiz = false;
         // Call question two after finished checking question one and remove event listener.
         this.removeEventListener("click", questionOneCheck);
+        submitBtn1.remove();
         questionTwo();
     });
 }
@@ -106,6 +110,7 @@ function questionTwo() {
             }
         }
         takingQuiz = false;
+        submitBtn2.remove();
         // Call question three after finished checking question one
         questionThree();
         this.removeEventListener("click", questionTwoCheck);
@@ -140,6 +145,7 @@ function questionThree() {
             }
         }
         takingQuiz = false;
+        submitBtn3.remove();
         this.removeEventListener("click", questionThreeCheck);
         questionFour();
     })
@@ -174,6 +180,7 @@ function questionFour() {
             }
         }
         takingQuiz = false;
+        submitBtn4.remove();
         // Call question five after finished checking question one
         this.removeEventListener("click", questionFourCheck);
         questionFive();
@@ -205,18 +212,35 @@ function questionFive() {
         // End the quiz after question 5
         endQuiz();
         this.removeEventListener("click", questionFiveCheck);
+        submitBtn5.remove();
     })
 }
 
 function start() {
-    // Hide the start button
+    // Hide the start button and view highscores
     startBtn.style.display = "none";
+    highScores.style.display = "none";
     takingQuiz = true;
     // Start timer
-    //...
+    startTimer();
     // Call question one and change background for its text.
     questions.style.backgroundColor = "#666";
     questionOne();
+}
+
+function startTimer() {
+    interval = setInterval(function () {
+        timeRemaining--;
+        timeCounter.innerHTML = timeRemaining;
+        if (timeRemaining <= 0) {
+            timesUp();
+        }
+    }, 1000);
+}
+
+function timesUp() {
+    clearInterval(interval);
+    endQuiz();
 }
 
 function addButton() {
@@ -252,16 +276,20 @@ function endQuiz() {
     // Create input for user name.
     document.getElementById("radioBtn").innerHTML = '<label for="submission">Enter your name:</label>' + " " +
         `<input type="text" id="submission">`;
-    // id of submit6;
-    addButton();
-    let submitBtn6 = document.getElementById("submit6");
-    submitBtn6.addEventListener("click", function () {
+    // create new button for submitting.
+    let endBtn = document.createElement("button");
+    endBtn.setAttribute("class", "btn my-5 text-light");
+    endBtn.setAttribute("id", "endBtn");
+    endBtn.innerHTML = "submit";
+    container.appendChild(endBtn);
+
+    document.getElementById("endBtn").addEventListener("click", function () {
         username = document.getElementById("submission").value;
         if (username === "") {
             username = "player";
         }
         showScores();
-        submitBtn6.remove();
+        document.getElementById("endBtn").remove();
     })
 }
 
