@@ -17,3 +17,7 @@ main p {
 .btn {
     background: teal;
 }
+
+#high-scores {
+    cursor: pointer;
+}
