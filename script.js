@@ -267,9 +267,11 @@ function endQuiz() {
 
 function showScores() {
     // Remove html elements no longer needed.
+    highScores.removeEventListener("click", showScores);
     h1.remove();
     questions.remove();
     form.remove();
+    startBtn.remove();
 
     let newh1 = document.createElement("h1");
     newh1.innerHTML = "highscores!"
@@ -284,12 +286,15 @@ function showScores() {
     } else {
         scoreList = {};
     }
+    // Dont update if they didnt play. (only way it's empty)
     if (username !== "") {
         scoreList[username] = score;
     }
 
-    // Store to local storage
-    storeObj(scoreList);
+    // Store to local storage. If string is empty, means user didnt take quiz and is accessing highscores. Dont write.
+    if (username !== "") {
+        storeObj(scoreList);
+    }
 
     let scores = document.createElement("ul");
     container.appendChild(scores);
@@ -306,3 +311,4 @@ function storeObj(obj) {
 }
 
 startBtn.addEventListener("click", start);
+highScores.addEventListener("click", showScores);
