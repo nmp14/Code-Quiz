@@ -11,12 +11,13 @@ let radioLabel = document.createElement("label");
 let submitBtn;
 
 let score = 0;
-let takingQuiz = false;
 // Variable for entering name at end of quiz
 let username = "";
 // Timer
 let timeRemaining = 60;
 let interval;
+// obj to determine if questions have been answered. Will be used to tally unanswered questions if timed out.
+let answeredQuestions = { question1: false, question2: false, question3: false, question4: false, question5: false };
 
 // Generate question one
 function questionOne() {
@@ -47,12 +48,12 @@ function questionOne() {
 
     // Submit on click and check score
     submitBtn.addEventListener("click", function questionOneCheck() {
-        if (document.getElementById("d").checked && takingQuiz === true) {
+        if (document.getElementById("d").checked) {
             score++;
-        } else if (!document.getElementById("d").checked && takingQuiz === true) {
+        } else if (!document.getElementById("d").checked) {
             wrongAnswer();
         }
-        takingQuiz = false;
+        answeredQuestions["question1"] = true;
         // Call question two after finished checking question one and remove event listener.
         this.removeEventListener("click", questionOneCheck);
         submitBtn.remove();
@@ -63,7 +64,6 @@ function questionOne() {
 
 function questionTwo() {
     // same functionality as question one overall
-    takingQuiz = true;
     h1.innerHTML = "what is the correct syntax for an object?";
     questions.innerHTML = `<pre class="text-light text-left">
     a) obj = {
@@ -95,12 +95,12 @@ function questionTwo() {
 
     // Submit on click and check score
     submitBtn.addEventListener("click", function questionTwoCheck() {
-        if (document.getElementById("a").checked && takingQuiz === true) {
+        if (document.getElementById("a").checked) {
             score++;
-        } else if (!document.getElementById("a").checked && takingQuiz === true) {
+        } else if (!document.getElementById("a").checked) {
             wrongAnswer();
         }
-        takingQuiz = false;
+        answeredQuestions["question2"] = true;
         submitBtn.remove();
         // Call question three after finished checking question one
         questionThree();
@@ -109,7 +109,6 @@ function questionTwo() {
 }
 
 function questionThree() {
-    takingQuiz = true;
     // Same logic as last two questions other than uses input instead of radio options
     h1.innerHTML = "What is the output of the following code?"
     questions.innerHTML = `<pre class="text-light text-left">
@@ -131,7 +130,7 @@ function questionThree() {
         } else {
             wrongAnswer();
         }
-        takingQuiz = false;
+        answeredQuestions["question3"] = true;
         submitBtn.remove();
         this.removeEventListener("click", questionThreeCheck);
         questionFour();
@@ -140,7 +139,6 @@ function questionThree() {
 
 function questionFour() {
     // Same as one and two
-    takingQuiz = true;
     h1.innerHTML = "What is another name for a string in C programming";
     questions.innerHTML = `<pre class="text-light text-left"> 
     a) There is no other name
@@ -158,12 +156,12 @@ function questionFour() {
     addButton();
 
     submitBtn.addEventListener("click", function questionFourCheck() {
-        if (document.getElementById("e").checked && takingQuiz === true) {
+        if (document.getElementById("e").checked) {
             score++;
-        } else if (!document.getElementById("e").checked && takingQuiz === true) {
+        } else if (!document.getElementById("e").checked) {
             wrongAnswer();
         }
-        takingQuiz = false;
+        answeredQuestions["question4"] = true;
         submitBtn.remove();
         // Call question five after finished checking question one
         this.removeEventListener("click", questionFourCheck);
@@ -172,7 +170,6 @@ function questionFour() {
 }
 
 function questionFive() {
-    takingQuiz = true;
     h1.innerHTML = "Is HTML a programming language? True or False"
     questions.innerHTML = "";
 
@@ -184,13 +181,13 @@ function questionFive() {
     addButton();
 
     submitBtn.addEventListener("click", function questionFiveCheck() {
-        if (document.getElementById("false").checked && takingQuiz === true) {
+        if (document.getElementById("false").checked) {
             score++;
-        } else if (!document.getElementById("false").checked && takingQuiz === true) {
+        } else if (!document.getElementById("false").checked) {
             wrongAnswer();
         }
-        takingQuiz = false;
         // End the quiz after question 5
+        answeredQuestions["question5"] = true;
         endQuiz();
         this.removeEventListener("click", questionFiveCheck);
         submitBtn.remove();
@@ -201,7 +198,6 @@ function start() {
     // Hide the start button and view highscores
     startBtn.style.display = "none";
     highScores.style.visibility = "hidden";
-    takingQuiz = true;
     // Start timer
     startTimer();
     // Call question one and change background for its text.
@@ -221,6 +217,15 @@ function startTimer() {
 
 function timesUp() {
     clearInterval(interval);
+
+    let unfinished = 0;
+    // Determine questions left unanswered and subtract from score. 
+    for (let question in answeredQuestions) {
+        if (answeredQuestions[question] === false) {
+            wrongAnswer();
+        }
+    }
+
     endQuiz();
     submitBtn.remove();
 }
