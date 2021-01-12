@@ -8,11 +8,10 @@ let questions = document.getElementById("question-content");
 let form = document.querySelector("form");
 let radioInput = document.createElement("input");
 let radioLabel = document.createElement("label");
+let submitBtn;
 
 let score = 0;
 let takingQuiz = false;
-// Counter for addButton() function. Allows for setting unique ids.
-let buttonCount = 1;
 // Variable for entering name at end of quiz
 let username = "";
 // Timer
@@ -46,21 +45,17 @@ function questionOne() {
     // Generate button for submitting. First time running will cause it to have an id of submit1.
     addButton();
 
-    let submitBtn1 = document.getElementById("submit1");
     // Submit on click and check score
-    submitBtn1.addEventListener("click", function questionOneCheck() {
+    submitBtn.addEventListener("click", function questionOneCheck() {
         if (document.getElementById("d").checked && takingQuiz === true) {
             score++;
         } else if (!document.getElementById("d").checked && takingQuiz === true) {
-            score--;
-            if (score < 0) {
-                score = 0;
-            }
+            wrongAnswer();
         }
         takingQuiz = false;
         // Call question two after finished checking question one and remove event listener.
         this.removeEventListener("click", questionOneCheck);
-        submitBtn1.remove();
+        submitBtn.remove();
         questionTwo();
     });
 }
@@ -97,20 +92,16 @@ function questionTwo() {
     generateRadio(answers);
     // Second time running addButton will have an id of submit2.
     addButton();
-    let submitBtn2 = document.getElementById("submit2");
 
     // Submit on click and check score
-    submitBtn2.addEventListener("click", function questionTwoCheck() {
+    submitBtn.addEventListener("click", function questionTwoCheck() {
         if (document.getElementById("a").checked && takingQuiz === true) {
             score++;
         } else if (!document.getElementById("a").checked && takingQuiz === true) {
-            score--;
-            if (score < 0) {
-                score = 0;
-            }
+            wrongAnswer();
         }
         takingQuiz = false;
-        submitBtn2.remove();
+        submitBtn.remove();
         // Call question three after finished checking question one
         questionThree();
         this.removeEventListener("click", questionTwoCheck);
@@ -134,18 +125,14 @@ function questionThree() {
     // 3rd run of addButton will have id of submit3
     addButton();
 
-    let submitBtn3 = document.getElementById("submit3");
-    submitBtn3.addEventListener("click", function questionThreeCheck() {
+    submitBtn.addEventListener("click", function questionThreeCheck() {
         if (document.getElementById("q3Answer").value.toLowerCase() === "undefined") {
             score++;
         } else {
-            score--;
-            if (score < 0) {
-                score = 0;
-            }
+            wrongAnswer();
         }
         takingQuiz = false;
-        submitBtn3.remove();
+        submitBtn.remove();
         this.removeEventListener("click", questionThreeCheck);
         questionFour();
     })
@@ -169,18 +156,15 @@ function questionFour() {
 
     // 4th time running will have id of submit4
     addButton();
-    let submitBtn4 = document.getElementById("submit4");
-    submitBtn4.addEventListener("click", function questionFourCheck() {
+
+    submitBtn.addEventListener("click", function questionFourCheck() {
         if (document.getElementById("e").checked && takingQuiz === true) {
             score++;
         } else if (!document.getElementById("e").checked && takingQuiz === true) {
-            score--;
-            if (score < 0) {
-                score = 0;
-            }
+            wrongAnswer();
         }
         takingQuiz = false;
-        submitBtn4.remove();
+        submitBtn.remove();
         // Call question five after finished checking question one
         this.removeEventListener("click", questionFourCheck);
         questionFive();
@@ -198,28 +182,25 @@ function questionFive() {
 
     //id of submit5
     addButton();
-    let submitBtn5 = document.getElementById("submit5");
-    submitBtn5.addEventListener("click", function questionFiveCheck() {
+
+    submitBtn.addEventListener("click", function questionFiveCheck() {
         if (document.getElementById("false").checked && takingQuiz === true) {
             score++;
         } else if (!document.getElementById("false").checked && takingQuiz === true) {
-            score--;
-            if (score < 0) {
-                score = 0;
-            }
+            wrongAnswer();
         }
         takingQuiz = false;
         // End the quiz after question 5
         endQuiz();
         this.removeEventListener("click", questionFiveCheck);
-        submitBtn5.remove();
+        submitBtn.remove();
     })
 }
 
 function start() {
     // Hide the start button and view highscores
     startBtn.style.display = "none";
-    highScores.style.display = "none";
+    highScores.style.visibility = "hidden";
     takingQuiz = true;
     // Start timer
     startTimer();
@@ -241,14 +222,24 @@ function startTimer() {
 function timesUp() {
     clearInterval(interval);
     endQuiz();
+    submitBtn.remove();
+}
+
+function wrongAnswer() {
+    score--;
+    if (score <= 0) {
+        score = 0;
+    }
+    timeRemaining -= 10;
+    timeCounter.innerHTML = timeRemaining;
 }
 
 function addButton() {
     newBtn.innerHTML = "Submit";
     newBtn.setAttribute("class", "btn my-5 text-light");
-    newBtn.setAttribute("id", "submit" + `${buttonCount}`);
+    newBtn.setAttribute("id", "submitBtn");
     container.appendChild(newBtn);
-    buttonCount++;
+    submitBtn = document.getElementById("submitBtn");
 }
 
 function generateRadio(answers) {
@@ -269,6 +260,7 @@ function generateRadio(answers) {
 }
 
 function endQuiz() {
+    clearInterval(interval);
     h1.innerHTML = "All done!";
     // Change background of questions to same as page;
     questions.style.backgroundColor = "#555";
