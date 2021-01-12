@@ -9,6 +9,10 @@ let form = document.querySelector("form");
 let radioInput = document.createElement("input");
 let radioLabel = document.createElement("label");
 
+let score = 0;
+let takingQuiz = false;
+
+// Generate question one
 function questionOne() {
     h1.innerHTML = "What is the output of the following code?";
     questions.innerHTML = `<pre class="text-light">
@@ -33,11 +37,32 @@ function questionOne() {
     generateRadio(answers);
     // Generate button for submitting
     addButton();
+
+    // Submit on click and check score
+    let submitBtn = document.getElementById("submit");
+    submitBtn.addEventListener("click", function () {
+        if (document.getElementById("d").checked && takingQuiz === true) {
+            score++;
+        } else if (!document.getElementById("d").checked && takingQuiz === true) {
+            score--;
+            if (score < 0) {
+                score = 0;
+            }
+        }
+        takingQuiz = false;
+        // Call question two after finished checking question one
+        questionTwo();
+    });
+}
+
+function QuestionTwo() {
+
 }
 
 function start() {
     // Hide the start button
     startBtn.style.display = "none";
+    takingQuiz = true;
     // Start timer
     //...
     // Call question one.
