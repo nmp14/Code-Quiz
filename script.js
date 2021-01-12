@@ -5,8 +5,9 @@ let startBtn = document.getElementById("start-button");
 let newBtn = document.createElement("button");
 let h1 = document.querySelector("h1");
 let questions = document.getElementById("question-content");
-let answerDiv = document.createElement("div");
-let answer;
+let form = document.querySelector("form");
+let radioInput = document.createElement("input");
+let radioLabel = document.createElement("label");
 
 function questionOne() {
     h1.innerHTML = "What is the output of the following code?";
@@ -26,12 +27,10 @@ function questionOne() {
     </pre>`
     questions.style.backgroundColor = "#666";
 
-    answers = ["a) :(", "b) :)", "c) undefined", "d) 2", "e) 5"];
+    answers = ["a) :3", "b) :(", "c) undefined", "d) 2", "e) 5"];
 
-    // Create ul and answers.
-    answerDiv.setAttribute('class', 'answers');
-    container.appendChild(answerDiv);
-    generateAnswers(answers);
+    // Create radio options.
+    generateRadio(answers);
     // Generate button for submitting
     addButton();
 }
@@ -48,16 +47,19 @@ function start() {
 function addButton() {
     newBtn.innerHTML = "Submit";
     newBtn.setAttribute("class", "btn my-5 text-light");
+    newBtn.setAttribute("id", "submit");
     container.appendChild(newBtn);
 }
 
-function generateAnswers(answers) {
-    let html = '<ul>'
-    answers.forEach(element => {
-        html += '<li><button class="btn text-light">' + element + '</button></li>';
-    });
-    html += '</ul>';
-    answerDiv.innerHTML = html;
+function generateRadio(answers) {
+    output = ""
+    for (var i = 0; i < answers.length; i++) {
+        answer = answers[i].split(")");
+        answerKey = answer[0];
+        output += '<input class="form-check-input mb-2" id=' + answerKey + ' type="radio" value="yes" name="box2"> '
+            + `<label class="form-check-label mb-2" for=${answerKey}>` + answerKey + ') ' + answer[1] + '</label><br>';
+        document.getElementById("radioBtn").innerHTML = output;
+    }
 }
 
 startBtn.addEventListener("click", start);
