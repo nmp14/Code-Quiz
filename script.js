@@ -257,6 +257,9 @@ function endQuiz() {
     let submitBtn6 = document.getElementById("submit6");
     submitBtn6.addEventListener("click", function () {
         username = document.getElementById("submission").value;
+        if (username === "") {
+            username = "player";
+        }
         showScores();
         submitBtn6.remove();
     })
@@ -281,7 +284,9 @@ function showScores() {
     } else {
         scoreList = {};
     }
-    scoreList[username] = score;
+    if (username !== "") {
+        scoreList[username] = score;
+    }
 
     // Store to local storage
     storeObj(scoreList);
