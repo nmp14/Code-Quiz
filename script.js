@@ -11,6 +11,7 @@ let radioLabel = document.createElement("label");
 
 let score = 0;
 let takingQuiz = false;
+let buttonCount = 1;
 
 // Generate question one
 function questionOne() {
@@ -35,12 +36,11 @@ function questionOne() {
 
     // Create radio options.
     generateRadio(answers);
-    // Generate button for submitting
+    // Generate button for submitting. First time running will cause it to have an id of submit1.
     addButton();
-
+    let submitBtn1 = document.getElementById("submit1");
     // Submit on click and check score
-    let submitBtn = document.getElementById("submit");
-    submitBtn.addEventListener("click", function () {
+    submitBtn1.addEventListener("click", function questionOneCheck() {
         if (document.getElementById("d").checked && takingQuiz === true) {
             score++;
         } else if (!document.getElementById("d").checked && takingQuiz === true) {
@@ -51,11 +51,16 @@ function questionOne() {
         }
         takingQuiz = false;
         // Call question two after finished checking question one
+        this.removeEventListener("click", questionOneCheck);
         questionTwo();
     });
 }
 
+
 function questionTwo() {
+    // same functionality as question one overall
+    takingQuiz = true;
+    console.log(score);
     h1.innerHTML = "what is the correct syntax for an object?";
     questions.innerHTML = `<pre class="text-light">
     a) obj = {
@@ -82,7 +87,30 @@ function questionTwo() {
     answers = ["a", "b", "c", "d", "e"];
 
     generateRadio(answers);
+    // Second time running addButton will have an id of submit2.
+    addButton();
+    let submitBtn2 = document.getElementById("submit2");
 
+    // Submit on click and check score
+    submitBtn2.addEventListener("click", function questionTwoCheck() {
+        if (document.getElementById("a").checked && takingQuiz === true) {
+            score++;
+        } else if (!document.getElementById("a").checked && takingQuiz === true) {
+            score--;
+            if (score < 0) {
+                score = 0;
+            }
+        }
+        takingQuiz = false;
+        //this.removeEventListener("click", questionTwoCheck);
+        // Call question three after finished checking question one
+        questionThree();
+        this.removeEventListener("click", questionTwoCheck);
+    });
+}
+
+function questionThree() {
+    console.log(score);
 }
 
 function start() {
@@ -98,8 +126,9 @@ function start() {
 function addButton() {
     newBtn.innerHTML = "Submit";
     newBtn.setAttribute("class", "btn my-5 text-light");
-    newBtn.setAttribute("id", "submit");
+    newBtn.setAttribute("id", "submit" + `${buttonCount}`);
     container.appendChild(newBtn);
+    buttonCount++;
 }
 
 function generateRadio(answers) {
@@ -112,8 +141,8 @@ function generateRadio(answers) {
                 + `<label class="form-check-label mb-2" for=${answerKey}>` + answerKey + ') ' + answer[1] + '</label><br>';
             document.getElementById("radioBtn").innerHTML = output;
         } else {
-            output += '<input class="form-check-input mb-2" id=' + answerKey + ' type="radio" value="yes" name="box2"> '
-                + `<label class="form-check-label mb-2" for=${answerKey}>` + answerKey + '</label><br>';
+            output += '<input class="form-check-input mb-2" id=' + answers[i] + ' type="radio" value="yes" name="box2"> '
+                + `<label class="form-check-label mb-2" for=${answers[i]}>` + answers[i] + '</label><br>';
             document.getElementById("radioBtn").innerHTML = output;
         }
     }
