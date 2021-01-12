@@ -55,7 +55,33 @@ function questionOne() {
     });
 }
 
-function QuestionTwo() {
+function questionTwo() {
+    h1.innerHTML = "what is the correct syntax for an object?";
+    questions.innerHTML = `<pre class="text-light">
+    a) obj = {
+        batteryLevel: 100%,
+        model: iphone 11
+    };
+    b) obj = [
+        batterLevel: 100%.
+        mode: iphone 11
+    ];
+    c) obj = {
+        batteryLevel = 100%,
+        model: iphone 11
+    };
+    d) obj = [
+        batteryLevel = 100%,
+        model: iphone 11
+    ];
+    e) obj = {
+        batteryLevel: 100%
+        model: iphone 11
+    }; </pre>`
+
+    answers = ["a", "b", "c", "d", "e"];
+
+    generateRadio(answers);
 
 }
 
@@ -81,9 +107,15 @@ function generateRadio(answers) {
     for (var i = 0; i < answers.length; i++) {
         answer = answers[i].split(")");
         answerKey = answer[0];
-        output += '<input class="form-check-input mb-2" id=' + answerKey + ' type="radio" value="yes" name="box2"> '
-            + `<label class="form-check-label mb-2" for=${answerKey}>` + answerKey + ') ' + answer[1] + '</label><br>';
-        document.getElementById("radioBtn").innerHTML = output;
+        if (answer[1] !== undefined) {
+            output += '<input class="form-check-input mb-2" id=' + answerKey + ' type="radio" value="yes" name="box2"> '
+                + `<label class="form-check-label mb-2" for=${answerKey}>` + answerKey + ') ' + answer[1] + '</label><br>';
+            document.getElementById("radioBtn").innerHTML = output;
+        } else {
+            output += '<input class="form-check-input mb-2" id=' + answerKey + ' type="radio" value="yes" name="box2"> '
+                + `<label class="form-check-label mb-2" for=${answerKey}>` + answerKey + '</label><br>';
+            document.getElementById("radioBtn").innerHTML = output;
+        }
     }
 }
 
