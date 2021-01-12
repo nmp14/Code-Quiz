@@ -11,7 +11,11 @@ let radioLabel = document.createElement("label");
 
 let score = 0;
 let takingQuiz = false;
+// Counter for addButton() function. Allows for setting unique ids.
 let buttonCount = 1;
+
+// Change background color for where question is
+questions.style.backgroundColor = "#666";
 
 // Generate question one
 function questionOne() {
@@ -30,14 +34,16 @@ function questionOne() {
     }
     console.log("hello");
     </pre>`
-    questions.style.backgroundColor = "#666";
 
+    // Array of answer choices
     answers = ["a) :3", "b) :(", "c) undefined", "d) 2", "e) 5"];
 
-    // Create radio options.
+    // Create radio options for user to select answers.
     generateRadio(answers);
+
     // Generate button for submitting. First time running will cause it to have an id of submit1.
     addButton();
+
     let submitBtn1 = document.getElementById("submit1");
     // Submit on click and check score
     submitBtn1.addEventListener("click", function questionOneCheck() {
@@ -50,7 +56,7 @@ function questionOne() {
             }
         }
         takingQuiz = false;
-        // Call question two after finished checking question one
+        // Call question two after finished checking question one and remove event listener.
         this.removeEventListener("click", questionOneCheck);
         questionTwo();
     });
@@ -111,6 +117,76 @@ function questionTwo() {
 
 function questionThree() {
     console.log(score);
+    takingQuiz = true;
+    // Same logic as last two questions other than uses input instead of radio options
+    h1.innerHTML = "What is the output of the following code?"
+    questions.innerHTML = `<pre class="text-light">
+    let max = (numbersArr) => {
+        Math.max(...numbersArr)
+    }
+    console.log([-1, 5, 12, -13]);</pre>`;
+
+    // Create input for user answer instead of radio options.
+    document.getElementById("radioBtn").innerHTML = '<label for="q3Answer">Answer</label><br>' +
+        `<input type="text" id="q3Answer">`;
+
+    // 3rd run of addButton will have id of submit3
+    addButton();
+
+    let submitBtn3 = document.getElementById("submit3");
+    submitBtn3.addEventListener("click", function questionThreeCheck() {
+        if (document.getElementById("q3Answer").value.toLowerCase() === "undefined") {
+            score++;
+        } else {
+            score--;
+            if (score < 0) {
+                score = 0;
+            }
+        }
+        takingQuiz = false;
+        this.removeEventListener("click", questionThreeCheck);
+        questionFour();
+    })
+}
+
+function questionFour() {
+    // Same as one and two
+    takingQuiz = true;
+    console.log(score);
+    h1.innerHTML = "What is another name for a string in C programming";
+    questions.innerHTML = `<pre class="text-light> 
+    a) There is no other name
+    b) str
+    c) s
+    d) char
+    e) char * </pre>`;
+
+    answers = ["a", "b", "c", "d", "e"];
+
+    generateRadio(answers);
+
+    // 4th time running will have id of submit4
+    addButton();
+    let submitBtn4 = document.getElementById("submit4");
+    submitBtn4.addEventListener("click", function questionFourCheck() {
+        if (document.getElementById("e").checked && takingQuiz === true) {
+            score++;
+        } else if (!document.getElementById("e").checked && takingQuiz === true) {
+            score--;
+            if (score < 0) {
+                score = 0;
+            }
+        }
+        takingQuiz = false;
+        //this.removeEventListener("click", questionTwoCheck);
+        // Call question three after finished checking question one
+        questionFive();
+        this.removeEventListener("click", questionFourCheck);
+    });
+}
+
+function questionFive() {
+
 }
 
 function start() {
