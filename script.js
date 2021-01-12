@@ -13,6 +13,8 @@ let score = 0;
 let takingQuiz = false;
 // Counter for addButton() function. Allows for setting unique ids.
 let buttonCount = 1;
+// Variable for entering name at end of quiz
+let username = "";
 
 // Generate question one
 function questionOne() {
@@ -63,7 +65,6 @@ function questionOne() {
 function questionTwo() {
     // same functionality as question one overall
     takingQuiz = true;
-    console.log(score);
     h1.innerHTML = "what is the correct syntax for an object?";
     questions.innerHTML = `<pre class="text-light text-left">
     a) obj = {
@@ -112,7 +113,6 @@ function questionTwo() {
 }
 
 function questionThree() {
-    console.log(score);
     takingQuiz = true;
     // Same logic as last two questions other than uses input instead of radio options
     h1.innerHTML = "What is the output of the following code?"
@@ -148,7 +148,6 @@ function questionThree() {
 function questionFour() {
     // Same as one and two
     takingQuiz = true;
-    console.log(score);
     h1.innerHTML = "What is another name for a string in C programming";
     questions.innerHTML = `<pre class="text-light text-left"> 
     a) There is no other name
@@ -182,7 +181,6 @@ function questionFour() {
 }
 
 function questionFive() {
-    console.log(score);
     takingQuiz = true;
     h1.innerHTML = "Is HTML a programming language? True or False"
     questions.innerHTML = "";
@@ -195,9 +193,9 @@ function questionFive() {
     addButton();
     let submitBtn5 = document.getElementById("submit5");
     submitBtn5.addEventListener("click", function questionFiveCheck() {
-        if (document.getElementById("true").checked && takingQuiz === true) {
+        if (document.getElementById("false").checked && takingQuiz === true) {
             score++;
-        } else if (!document.getElementById("true").checked && takingQuiz === true) {
+        } else if (!document.getElementById("false").checked && takingQuiz === true) {
             score--;
             if (score < 0) {
                 score = 0;
@@ -247,7 +245,44 @@ function generateRadio(answers) {
 }
 
 function endQuiz() {
-    console.log(score);
+    h1.innerHTML = "All done!";
+    // Change background of questions to same as page;
+    questions.style.backgroundColor = "#555";
+    questions.innerHTML = `<pre class="text-light text-left mb-3 pl-3">Your score is: ${score}</pre>`;
+    // Create input for user name.
+    document.getElementById("radioBtn").innerHTML = '<label for="submission">Enter your name:</label>' + " " +
+        `<input type="text" id="submission">`;
+    // id of submit6;
+    addButton();
+    let submitBtn6 = document.getElementById("submit6");
+    submitBtn6.addEventListener("click", function () {
+        username = document.getElementById("submission").value;
+        showScores();
+        submitBtn6.remove();
+    })
+}
+
+function showScores() {
+    // Remove html elements no longer needed.
+    h1.remove();
+    questions.remove();
+    form.remove();
+    // Object for storing name and score.
+    let newh1 = document.createElement("h1");
+    newh1.innerHTML = "highscores!"
+    newh1.setAttribute("class", "text-light mb-3");
+    container.appendChild(newh1);
+
+    let scoreList = {};
+    scoreList[username] = score;
+
+    let scores = document.createElement("ul");
+    container.appendChild(scores);
+
+    let scoreItem = document.createElement("li");
+    scoreItem.innerHTML = username + ": " + score;
+    scores.appendChild(scoreItem);
+
 }
 
 startBtn.addEventListener("click", start);
