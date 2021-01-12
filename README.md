@@ -7,3 +7,5 @@ The quiz consists of 5 general coding questions that are timed and gives one poi
 Uses localStorage to save highscores.
 
 https://nmp14.github.io/Code-Quiz/
+
+![homepage](image/code-quiz.png)
