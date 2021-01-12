@@ -267,22 +267,37 @@ function showScores() {
     h1.remove();
     questions.remove();
     form.remove();
-    // Object for storing name and score.
+
     let newh1 = document.createElement("h1");
     newh1.innerHTML = "highscores!"
     newh1.setAttribute("class", "text-light mb-3");
     container.appendChild(newh1);
 
-    let scoreList = {};
+    // get scores from localStorage if it exists.
+    storedList = JSON.parse(localStorage.getItem("scores"));
+    let scoreList;
+    if (storedList !== null && storedList !== undefined) {
+        scoreList = storedList;
+    } else {
+        scoreList = {};
+    }
     scoreList[username] = score;
+
+    // Store to local storage
+    storeObj(scoreList);
 
     let scores = document.createElement("ul");
     container.appendChild(scores);
 
-    let scoreItem = document.createElement("li");
-    scoreItem.innerHTML = username + ": " + score;
-    scores.appendChild(scoreItem);
+    for (let person in scoreList) {
+        let scoreItem = document.createElement("li");
+        scoreItem.innerHTML = person + ": " + scoreList[person];
+        scores.appendChild(scoreItem);
+    }
+}
 
+function storeObj(obj) {
+    localStorage.setItem("scores", JSON.stringify(obj));
 }
 
 startBtn.addEventListener("click", start);
