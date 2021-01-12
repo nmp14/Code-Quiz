@@ -14,13 +14,10 @@ let takingQuiz = false;
 // Counter for addButton() function. Allows for setting unique ids.
 let buttonCount = 1;
 
-// Change background color for where question is
-questions.style.backgroundColor = "#666";
-
 // Generate question one
 function questionOne() {
     h1.innerHTML = "What is the output of the following code?";
-    questions.innerHTML = `<pre class="text-light">
+    questions.innerHTML = `<pre class="text-light text-left">
     function vowelCount(string) {
         //vowels with fun face values.
         let vowels = { a: ':)', e: ':3', i: ':(', o: 'hello', u: '0.0' };
@@ -68,7 +65,7 @@ function questionTwo() {
     takingQuiz = true;
     console.log(score);
     h1.innerHTML = "what is the correct syntax for an object?";
-    questions.innerHTML = `<pre class="text-light">
+    questions.innerHTML = `<pre class="text-light text-left">
     a) obj = {
         batteryLevel: 100%,
         model: iphone 11
@@ -120,7 +117,7 @@ function questionThree() {
     takingQuiz = true;
     // Same logic as last two questions other than uses input instead of radio options
     h1.innerHTML = "What is the output of the following code?"
-    questions.innerHTML = `<pre class="text-light">
+    questions.innerHTML = `<pre class="text-light text-left">
     let max = (numbersArr) => {
         Math.max(...numbersArr)
     }
@@ -154,12 +151,13 @@ function questionFour() {
     takingQuiz = true;
     console.log(score);
     h1.innerHTML = "What is another name for a string in C programming";
-    questions.innerHTML = `<pre class="text-light> 
+    questions.innerHTML = `<pre class="text-light text-left"> 
     a) There is no other name
     b) str
     c) s
     d) char
-    e) char * </pre>`;
+    e) char * 
+    </pre>`;
 
     answers = ["a", "b", "c", "d", "e"];
 
@@ -186,7 +184,7 @@ function questionFour() {
 }
 
 function questionFive() {
-
+    console.log(score);
 }
 
 function start() {
@@ -195,7 +193,8 @@ function start() {
     takingQuiz = true;
     // Start timer
     //...
-    // Call question one.
+    // Call question one and change background for its text.
+    questions.style.backgroundColor = "#666";
     questionOne();
 }
 
