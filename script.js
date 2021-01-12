@@ -231,6 +231,9 @@ function wrongAnswer() {
         score = 0;
     }
     timeRemaining -= 10;
+    if (timeRemaining <= 0) {
+        timeRemaining = 0;
+    }
     timeCounter.innerHTML = timeRemaining;
 }
 
