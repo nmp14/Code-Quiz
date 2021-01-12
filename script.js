@@ -105,7 +105,6 @@ function questionTwo() {
             }
         }
         takingQuiz = false;
-        //this.removeEventListener("click", questionTwoCheck);
         // Call question three after finished checking question one
         questionThree();
         this.removeEventListener("click", questionTwoCheck);
@@ -176,15 +175,39 @@ function questionFour() {
             }
         }
         takingQuiz = false;
-        //this.removeEventListener("click", questionTwoCheck);
-        // Call question three after finished checking question one
-        questionFive();
+        // Call question five after finished checking question one
         this.removeEventListener("click", questionFourCheck);
+        questionFive();
     });
 }
 
 function questionFive() {
     console.log(score);
+    takingQuiz = true;
+    h1.innerHTML = "Is HTML a programming language? True or False"
+    questions.innerHTML = "";
+
+    answers = ["true", "false"];
+
+    generateRadio(answers);
+
+    //id of submit5
+    addButton();
+    let submitBtn5 = document.getElementById("submit5");
+    submitBtn5.addEventListener("click", function questionFiveCheck() {
+        if (document.getElementById("true").checked && takingQuiz === true) {
+            score++;
+        } else if (!document.getElementById("true").checked && takingQuiz === true) {
+            score--;
+            if (score < 0) {
+                score = 0;
+            }
+        }
+        takingQuiz = false;
+        // End the quiz after question 5
+        endQuiz();
+        this.removeEventListener("click", questionFiveCheck);
+    })
 }
 
 function start() {
@@ -221,6 +244,10 @@ function generateRadio(answers) {
             document.getElementById("radioBtn").innerHTML = output;
         }
     }
+}
+
+function endQuiz() {
+    console.log(score);
 }
 
 startBtn.addEventListener("click", start);
