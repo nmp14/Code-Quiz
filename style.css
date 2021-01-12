@@ -22,20 +22,6 @@ main p {
     margin: 0 auto;
 }
 
-.answers ul {
-    list-style-type: none;
-    text-align: left;
-}
-
-.answers li {
-    margin-bottom: 6px;
-}
-
-.answers li button:focus {
-    background: aqua;
-    color: black !important;
-}
-
 .btn {
     background: teal;
 }
