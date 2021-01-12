@@ -289,25 +289,34 @@ function showScores() {
     // Dont update if they didnt play. (only way it's empty)
     if (username !== "") {
         scoreList[username] = score;
-    }
-
-    // Store to local storage. If string is empty, means user didnt take quiz and is accessing highscores. Dont write.
-    if (username !== "") {
+        // Store to local storage. If string is empty, means user didnt take quiz and is accessing highscores. Dont write.
         storeObj(scoreList);
     }
+
+    // Sort object so it renders highscores in order.
+    let sortedScoreList = sortObj(scoreList);
 
     let scores = document.createElement("ul");
     container.appendChild(scores);
 
-    for (let person in scoreList) {
+    for (let person in sortedScoreList) {
         let scoreItem = document.createElement("li");
-        scoreItem.innerHTML = person + ": " + scoreList[person];
+        scoreItem.innerHTML = person + ": " + sortedScoreList[person];
         scores.appendChild(scoreItem);
     }
 }
 
 function storeObj(obj) {
     localStorage.setItem("scores", JSON.stringify(obj));
+}
+
+function sortObj(obj) {
+    let sorted = Object.entries(obj).sort((a, b) => b[1] - a[1]);
+    let newObj = {};
+    for (let i = 0; i < sorted.length; i++) {
+        newObj[sorted[i][0]] = sorted[i][1];
+    }
+    return newObj;
 }
 
 startBtn.addEventListener("click", start);
