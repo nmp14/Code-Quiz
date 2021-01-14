@@ -349,3 +349,9 @@ function sortObj(obj) {
 
 startBtn.addEventListener("click", start);
 highScores.addEventListener("click", showScores);
+$(window).keydown(function (event) {
+    if (event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+    }
+});
