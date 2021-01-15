@@ -2,10 +2,11 @@ let highScores = document.getElementById("high-scores");
 let timeCounter = document.getElementById("time-count");
 let container = document.getElementById("quiz-container");
 let startBtn = document.getElementById("start-button");
-let newBtn = document.createElement("button");
 let h1 = document.querySelector("h1");
 let questions = document.getElementById("question-content");
 let form = document.querySelector("form");
+
+let newBtn = document.createElement("button");
 let radioInput = document.createElement("input");
 let radioLabel = document.createElement("label");
 let submitBtn;
@@ -13,7 +14,7 @@ let submitBtn;
 let score = 0;
 // Variable for entering name at end of quiz
 let username = "";
-// Timer
+// Timer related variables
 let timeRemaining = 60;
 let interval;
 // obj to determine if questions have been answered. Will be used to tally unanswered questions if timed out.
@@ -43,7 +44,7 @@ function questionOne() {
     // Create radio options for user to select answers.
     generateRadio(answers);
 
-    // Generate button for submitting. First time running will cause it to have an id of submit1.
+    // Generate button for submitting.
     addButton();
 
     // Submit on click and check score
@@ -56,7 +57,7 @@ function questionOne() {
         answeredQuestions["question1"] = true;
         // Call question two after finished checking question one and remove event listener.
         this.removeEventListener("click", questionOneCheck);
-        submitBtn.remove();
+        // Call question 2
         questionTwo();
     });
 }
@@ -90,8 +91,6 @@ function questionTwo() {
     answers = ["a", "b", "c", "d", "e"];
 
     generateRadio(answers);
-    // Second time running addButton will have an id of submit2.
-    addButton();
 
     // Submit on click and check score
     submitBtn.addEventListener("click", function questionTwoCheck() {
@@ -101,10 +100,9 @@ function questionTwo() {
             wrongAnswer();
         }
         answeredQuestions["question2"] = true;
-        submitBtn.remove();
         // Call question three after finished checking question one
-        questionThree();
         this.removeEventListener("click", questionTwoCheck);
+        questionThree();
     });
 }
 
@@ -121,9 +119,6 @@ function questionThree() {
     document.getElementById("radioBtn").innerHTML = '<label for="q3Answer">Answer</label><br>' +
         `<input type="text" id="q3Answer">`;
 
-    // 3rd run of addButton will have id of submit3
-    addButton();
-
     submitBtn.addEventListener("click", function questionThreeCheck() {
         if (document.getElementById("q3Answer").value.toLowerCase() === "undefined") {
             score++;
@@ -131,7 +126,6 @@ function questionThree() {
             wrongAnswer();
         }
         answeredQuestions["question3"] = true;
-        submitBtn.remove();
         this.removeEventListener("click", questionThreeCheck);
         questionFour();
     })
@@ -152,9 +146,6 @@ function questionFour() {
 
     generateRadio(answers);
 
-    // 4th time running will have id of submit4
-    addButton();
-
     submitBtn.addEventListener("click", function questionFourCheck() {
         if (document.getElementById("e").checked) {
             score++;
@@ -162,7 +153,6 @@ function questionFour() {
             wrongAnswer();
         }
         answeredQuestions["question4"] = true;
-        submitBtn.remove();
         // Call question five after finished checking question one
         this.removeEventListener("click", questionFourCheck);
         questionFive();
@@ -176,9 +166,6 @@ function questionFive() {
     answers = ["true", "false"];
 
     generateRadio(answers);
-
-    //id of submit5
-    addButton();
 
     submitBtn.addEventListener("click", function questionFiveCheck() {
         if (document.getElementById("false").checked) {
@@ -218,14 +205,13 @@ function startTimer() {
 function timesUp() {
     clearInterval(interval);
 
-    let unfinished = 0;
     // Determine questions left unanswered and subtract from score. 
     for (let question in answeredQuestions) {
         if (answeredQuestions[question] === false) {
             wrongAnswer();
         }
     }
-
+    // Calls function to end quiz and determine score.
     endQuiz();
     submitBtn.remove();
 }
@@ -296,15 +282,13 @@ function endQuiz() {
 function showScores() {
     // Remove html elements no longer needed.
     highScores.removeEventListener("click", showScores);
-    h1.remove();
     questions.remove();
     form.remove();
     startBtn.remove();
 
-    let newh1 = document.createElement("h1");
-    newh1.innerHTML = "highscores!"
-    newh1.setAttribute("class", "text-light mb-3");
-    container.appendChild(newh1);
+    // Change text for highscores
+    h1.innerHTML = "highscores!"
+    h1.setAttribute("class", "text-light mb-3");
 
     // get scores from localStorage if it exists.
     storedList = JSON.parse(localStorage.getItem("scores"));
@@ -334,10 +318,12 @@ function showScores() {
     }
 }
 
+// Function for storing scores in localStorage
 function storeObj(obj) {
     localStorage.setItem("scores", JSON.stringify(obj));
 }
 
+// Helper function for sorting stored scores object.
 function sortObj(obj) {
     let sorted = Object.entries(obj).sort((a, b) => b[1] - a[1]);
     let newObj = {};
@@ -347,6 +333,7 @@ function sortObj(obj) {
     return newObj;
 }
 
+// Event listeners for start button, highscores html element, and window (prevents default refresh if enter key is pressed)
 startBtn.addEventListener("click", start);
 highScores.addEventListener("click", showScores);
 $(window).keydown(function (event) {
