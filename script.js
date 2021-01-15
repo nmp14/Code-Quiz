@@ -113,7 +113,7 @@ function questionThree() {
     let max = (numbersArr) => {
         Math.max(...numbersArr)
     }
-    console.log([-1, 5, 12, -13]);</pre>`;
+    console.log(max([-1, 5, 12, -13]));</pre>`;
 
     // Create input for user answer instead of radio options.
     document.getElementById("radioBtn").innerHTML = '<label for="q3Answer">Answer</label><br>' +
