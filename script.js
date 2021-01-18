@@ -20,6 +20,43 @@ let interval;
 // obj to determine if questions have been answered. Will be used to tally unanswered questions if timed out.
 let answeredQuestions = { question1: false, question2: false, question3: false, question4: false, question5: false };
 
+function start() {
+    // Hide the start button and view highscores
+    startBtn.style.display = "none";
+    highScores.style.visibility = "hidden";
+    // Start timer
+    startTimer();
+    // Call question one and change background for its text.
+    questions.style.backgroundColor = "#666";
+    // Call question one
+    questionOne();
+}
+
+function startTimer() {
+    interval = setInterval(function () {
+        timeRemaining--;
+        timeCounter.innerHTML = timeRemaining;
+        if (timeRemaining <= 0) {
+            // Call times up function to end quiz if out of time.
+            timesUp();
+        }
+    }, 1000);
+}
+
+function timesUp() {
+    clearInterval(interval);
+
+    // Determine questions left unanswered and subtract from score. 
+    for (let question in answeredQuestions) {
+        if (answeredQuestions[question] === false) {
+            wrongAnswer();
+        }
+    }
+    // Calls function to end quiz and determine score.
+    endQuiz();
+    submitBtn.remove();
+}
+
 // Generate question one
 function questionOne() {
     h1.innerHTML = "What is the output of the following code?";
@@ -65,7 +102,7 @@ function questionOne() {
 
 function questionTwo() {
     // same functionality as question one overall
-    h1.innerHTML = "what is the correct syntax for an object?";
+    h1.innerHTML = "What is the correct syntax for an object?";
     questions.innerHTML = `<pre class="text-light text-left">
     a) obj = {
         batteryLevel: 100%,
@@ -133,7 +170,7 @@ function questionThree() {
 
 function questionFour() {
     // Same as one and two
-    h1.innerHTML = "What is another name for a string in C programming";
+    h1.innerHTML = "What is another name for a string in C programming?";
     questions.innerHTML = `<pre class="text-light text-left"> 
     a) There is no other name
     b) str
@@ -181,41 +218,6 @@ function questionFive() {
     })
 }
 
-function start() {
-    // Hide the start button and view highscores
-    startBtn.style.display = "none";
-    highScores.style.visibility = "hidden";
-    // Start timer
-    startTimer();
-    // Call question one and change background for its text.
-    questions.style.backgroundColor = "#666";
-    questionOne();
-}
-
-function startTimer() {
-    interval = setInterval(function () {
-        timeRemaining--;
-        timeCounter.innerHTML = timeRemaining;
-        if (timeRemaining <= 0) {
-            timesUp();
-        }
-    }, 1000);
-}
-
-function timesUp() {
-    clearInterval(interval);
-
-    // Determine questions left unanswered and subtract from score. 
-    for (let question in answeredQuestions) {
-        if (answeredQuestions[question] === false) {
-            wrongAnswer();
-        }
-    }
-    // Calls function to end quiz and determine score.
-    endQuiz();
-    submitBtn.remove();
-}
-
 function wrongAnswer() {
     score--;
     if (score <= 0) {
@@ -236,11 +238,13 @@ function addButton() {
     submitBtn = document.getElementById("submitBtn");
 }
 
+// Function to generate answer choices with radio selection. 
 function generateRadio(answers) {
     output = ""
     for (var i = 0; i < answers.length; i++) {
         answer = answers[i].split(")");
         answerKey = answer[0];
+        // Conditional statement checks answer input. IE if formatted like 'A) answer' vs just 'A'.
         if (answer[1] !== undefined) {
             output += '<input class="form-check-input mb-2" id=' + answerKey + ' type="radio" value="yes" name="box2"> '
                 + `<label class="form-check-label mb-2" for=${answerKey}>` + answerKey + ') ' + answer[1] + '</label><br>';
